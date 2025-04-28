@@ -223,14 +223,48 @@ async function handleKafkaMessage(payload: EachMessagePayload): Promise<void> {
 	logger.debug(`[KafkaService] Processing message content: ${messageText.substring(0, 100)}...`)
 
 	try {
-		// Use the stored provider instance
 		const provider = activeClineProvider
-		logger.info(
-			`[KafkaService] Using stored ClineProvider instance: ${provider ? "Instance available" : "Instance MISSING"}`,
-		)
+		if (!provider) {
+			logger.warn("[KafkaService] No active ClineProvider found. Cannot process message.")
+			return
+		}
 
-		if (provider) {
-			logger.info("[KafkaService] Active ClineProvider found. Attempting to forward message to webview...")
+		// Try parsing the message as JSON for action commands
+		let isActionCommand = false
+		try {
+			const commandData = JSON.parse(messageText)
+
+			// Check if it's a general action (cancel, new_task)
+			if (commandData && typeof commandData.action === "string") {
+				if (commandData.action === "cancel_task" || commandData.action === "new_task") {
+					logger.info(`[KafkaService] Received general command via Kafka: action=${commandData.action}`)
+					// Call handleKafkaAction without targetMessageTs for general commands
+					await provider.handleKafkaAction(undefined, commandData.action, commandData.text)
+					isActionCommand = true
+				}
+				// Check if it's a targeted action (approve, reject, feedback)
+				else if (typeof commandData.targetMessageTs === "number") {
+					logger.info(
+						`[KafkaService] Received targeted action command via Kafka: action=${commandData.action}, targetTs=${commandData.targetMessageTs}`,
+					)
+					await provider.handleKafkaAction(commandData.targetMessageTs, commandData.action, commandData.text) // Pass optional text
+					isActionCommand = true
+				} else {
+					logger.debug(
+						"[KafkaService] Kafka message is valid JSON but not a recognized action command format (missing targetMessageTs for targeted action or invalid action type).",
+					)
+				}
+			} else {
+				logger.debug("[KafkaService] Kafka message is valid JSON but missing 'action' field.")
+			}
+		} catch (parseError) {
+			// Not a JSON message or invalid JSON, treat as plain text message injection
+			logger.debug("[KafkaService] Kafka message is not JSON or failed to parse, treating as plain text.")
+		}
+
+		// Fallback: If it wasn't an action command, inject the text as before
+		if (!isActionCommand) {
+			logger.info("[KafkaService] Forwarding plain text message to webview...")
 			logger.debug(`[KafkaService] Posting 'setChatBoxMessage' with text: ${messageText.substring(0, 50)}...`)
 			await provider.postMessageToWebview({
 				type: "invoke",
@@ -245,8 +279,6 @@ async function handleKafkaMessage(payload: EachMessagePayload): Promise<void> {
 				text: messageText,
 			})
 			logger.info("[KafkaService] Successfully forwarded 'sendMessage' to webview.")
-		} else {
-			logger.warn("[KafkaService] No active ClineProvider found. Cannot forward message.")
 		}
 	} catch (error) {
 		logger.error("[KafkaService] Error handling Kafka message:", { error })

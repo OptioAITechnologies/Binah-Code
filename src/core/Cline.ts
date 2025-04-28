@@ -391,27 +391,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 		}
 
 		let askTs: number
-		let kafkaMessageSent = false
-
-		const sendAskToKafkaOnce = (messageText: string | undefined, messageType: ClineAsk) => {
-			if (!kafkaMessageSent && messageText) {
-				const typesToSend: ClineAsk[] = [
-					"tool",
-					"command",
-					"command_output",
-					"mistake_limit_reached",
-					"api_req_failed",
-					"followup",
-				]
-				if (typesToSend.includes(messageType)) {
-					sendMessageToKafka(messageText).catch((err) => {
-						console.error("Error sending ask message to Kafka:", err)
-						this.providerRef.deref()?.log(`[Kafka Error] Failed to send ask message: ${err.message}`)
-					})
-					kafkaMessageSent = true // Mark as sent
-				}
-			}
-		}
+		//let kafkaMessageSent = false
 
 		if (partial !== undefined) {
 			const lastMessage = this.clineMessages.at(-1)
@@ -459,7 +439,8 @@ export class Cline extends EventEmitter<ClineEvents> {
 					lastMessage.progressStatus = progressStatus
 					await this.saveClineMessages()
 					this.updateClineMessage(lastMessage)
-					sendAskToKafkaOnce(text, type)
+					// Send notification now that the partial message is complete
+					this.sendActionRequiredNotification(askTs, type, text)
 				} else {
 					// This is a new and complete message, so add it like normal.
 					this.askResponse = undefined
@@ -468,7 +449,8 @@ export class Cline extends EventEmitter<ClineEvents> {
 					askTs = Date.now()
 					this.lastMessageTs = askTs
 					await this.addToClineMessages({ ts: askTs, type: "ask", ask: type, text })
-					sendAskToKafkaOnce(text, type)
+					// Send notification for newly added complete message
+					this.sendActionRequiredNotification(askTs, type, text)
 				}
 			}
 		} else {
@@ -479,6 +461,8 @@ export class Cline extends EventEmitter<ClineEvents> {
 			askTs = Date.now()
 			this.lastMessageTs = askTs
 			await this.addToClineMessages({ ts: askTs, type: "ask", ask: type, text })
+			// Send notification to Kafka that action is required for this non-partial ask
+			this.sendActionRequiredNotification(askTs, type, text)
 		}
 
 		await pWaitFor(() => this.askResponse !== undefined || this.lastMessageTs !== askTs, { interval: 100 })
@@ -504,6 +488,49 @@ export class Cline extends EventEmitter<ClineEvents> {
 		this.askResponseImages = images
 	}
 
+	/** Helper to send action required notifications to Kafka */
+	private sendActionRequiredNotification(messageTs: number, askType: ClineAsk, prompt?: string) {
+		this.providerRef
+			.deref()
+			?.log(`[Kafka Notify] Preparing action_required notification for askType: ${askType}, ts: ${messageTs}`)
+		// Determine valid response options based on askType
+		let options: string[] = []
+		switch (askType) {
+			case "tool":
+			case "command":
+			case "command_output":
+			case "mistake_limit_reached":
+			case "api_req_failed":
+				options = ["approve", "reject", "feedback"] // Or 'yes', 'no'
+				break
+			case "followup":
+			case "resume_task":
+			case "resume_completed_task":
+				options = ["feedback"] // Typically only feedback/message response
+				break
+			case "completion_result": // Usually doesn't require direct action, but might have feedback
+				options = ["feedback"]
+				break
+			// Add other ask types if necessary
+		}
+
+		const notificationPayload = {
+			type: "action_required",
+			messageTs: messageTs,
+			askType: askType,
+			prompt: prompt || "",
+			options: options,
+		}
+
+		const payloadString = JSON.stringify(notificationPayload)
+		this.providerRef.deref()?.log(`[Kafka Notify] Sending payload: ${payloadString}`)
+
+		sendMessageToKafka(payloadString).catch((err) => {
+			console.error(`Error sending action_required notification to Kafka for ts ${messageTs}:`, err)
+			this.providerRef.deref()?.log(`[Kafka Error] Failed to send action_required notification: ${err.message}`)
+		})
+	}
+
 	async say(
 		type: ClineSay,
 		text?: string,
@@ -522,13 +549,17 @@ export class Cline extends EventEmitter<ClineEvents> {
 				"command_output",
 				"shell_integration_warning",
 				"completion_result",
-			].includes(type) && // Include completion_result type
+			].includes(type) &&
 			text
 		) {
-			sendMessageToKafka(text).catch((err) => {
-				console.error("Error sending message to Kafka:", err)
-				// Optionally log to VS Code output channel as well
-				this.providerRef.deref()?.log(`[Kafka Error] Failed to send message: ${err.message}`)
+			// Construct JSON payload including the message type
+			const kafkaPayload = JSON.stringify({
+				type: type, // e.g., "text", "completion_result"
+				content: text,
+			})
+			sendMessageToKafka(kafkaPayload).catch((err) => {
+				console.error(`Error sending ${type} message to Kafka:`, err)
+				this.providerRef.deref()?.log(`[Kafka Error] Failed to send ${type} message: ${err.message}`)
 			})
 		}
 
