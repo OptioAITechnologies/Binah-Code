@@ -1,5 +1,9 @@
 name: Sync from RooVetGit/Roo-Code via PR
 
+permissions:
+  contents: write       # allow pushing branches
+  pull-requests: write  # allow creating PRs
+
 on:
   schedule:
     - cron: '0 2 * * *' # Every day at 2 AM UTC
@@ -8,13 +12,12 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # Full history
+          fetch-depth: 0
 
       - name: Set up Git config
         run: |
