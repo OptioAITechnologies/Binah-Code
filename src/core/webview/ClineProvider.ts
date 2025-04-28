@@ -49,7 +49,7 @@ import { getSystemPromptFilePath } from "../prompts/sections/custom-system-promp
 import { telemetryService } from "../../services/telemetry/TelemetryService"
 import { getWorkspacePath } from "../../utils/path"
 import { webviewMessageHandler } from "./webviewMessageHandler"
-import { WebviewMessage } from "../../shared/WebviewMessage"
+import { WebviewMessage, ClineAskResponse } from "../../shared/WebviewMessage"
 
 /**
  * https://github.com/microsoft/vscode-webview-ui-toolkit-samples/blob/main/default/weather-webview/src/providers/WeatherViewProvider.ts
@@ -1515,6 +1515,99 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		return this.getCurrentCline()?.clineMessages || []
 	}
 
+	/**
+	 * Handles action commands received via Kafka.
+	 * Finds the target message and simulates the corresponding user action.
+	 * @param targetMessageTs The timestamp of the message the action applies to.
+	 * @param action The action to perform (e.g., "approve", "reject", "cancel_task", "new_task").
+	 * @param text Optional text associated with the action (e.g., feedback for approve/reject, or initial prompt for new_task).
+	 */
+	public async handleKafkaAction(targetMessageTs: number | undefined, action: string, text?: string) {
+		this.log(
+			`[KafkaAction] Received action: ${action}, targetTs: ${targetMessageTs ?? "N/A"}, text: ${text ? text.substring(0, 30) + "..." : "none"}`,
+		)
+
+		// Handle general actions first
+		if (action === "cancel_task") {
+			const currentCline = this.getCurrentCline()
+			if (currentCline) {
+				this.log(`[KafkaAction] Cancelling current task ${currentCline.taskId} via Kafka command.`)
+				await this.cancelTask() // Use existing cancelTask method
+			} else {
+				this.log(`[KafkaAction] Received 'cancel_task' but no active task found.`)
+			}
+			return
+		}
+
+		if (action === "new_task") {
+			this.log(
+				`[KafkaAction] Starting new task via Kafka command. Prompt: ${text ? text.substring(0, 50) + "..." : "<no prompt>"}`,
+			)
+			await this.initClineWithTask(text) // Use existing method, pass text as optional initial prompt
+			return
+		}
+
+		// --- Handle targeted actions below ---
+
+		// Targeted actions require a timestamp
+		if (targetMessageTs === undefined) {
+			this.log(`[KafkaAction] Action '${action}' requires a targetMessageTs, but none was provided.`)
+			return
+		}
+
+		const cline = this.getCurrentCline()
+		if (!cline) {
+			this.log(`[KafkaAction] No active Cline task found to handle targeted action for ts: ${targetMessageTs}`)
+			return
+		}
+
+		// Find the message the action targets
+		const targetMessageIndex = cline.clineMessages.findIndex((msg) => msg.ts === targetMessageTs)
+		if (targetMessageIndex === -1) {
+			this.log(
+				`[KafkaAction] Target message with ts ${targetMessageTs} not found in current task ${cline.taskId}`,
+			)
+			return
+		}
+
+		const targetMessage = cline.clineMessages[targetMessageIndex]
+
+		// Ensure the target message is one that expects a response (an 'ask')
+		if (targetMessage.type !== "ask") {
+			this.log(
+				`[KafkaAction] Target message with ts ${targetMessageTs} is not an 'ask' type, cannot apply action.`,
+			)
+			return
+		}
+
+		// Determine the response type based on the action string
+		let responseType: ClineAskResponse | null = null
+		switch (action.toLowerCase()) {
+			case "approve":
+			case "yes":
+			case "run": // Alias for approve/yes
+			case "save": // Alias for approve/yes
+				responseType = "yesButtonClicked"
+				break
+			case "reject":
+			case "no":
+				responseType = "noButtonClicked"
+				break
+			case "feedback": // Specific action for providing feedback text
+			case "messageresponse":
+				responseType = "messageResponse"
+				break
+			default:
+				this.log(`[KafkaAction] Unknown action received: ${action}`)
+				return // Unknown action
+		}
+
+		// Simulate the response
+		this.log(`[KafkaAction] Simulating response '${responseType}' for message ts ${targetMessageTs}`)
+		await cline.handleWebviewAskResponse(responseType, text) // Pass optional text for feedback
+	}
+
+	// Add public getter
 	// Add public getter
 	public getMcpHub(): McpHub | undefined {
 		return this.mcpHub
