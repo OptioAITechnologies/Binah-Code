@@ -1034,6 +1034,43 @@ export class ClineProvider extends EventEmitter<ClineProviderEvents> implements 
 		}
 	}
 
+	async setInitialChatText(text: string) {
+		this.log(`setInitialChatText called with text: ${text.substring(0, 50)}...`) // Log entry
+
+		if (!this.view) {
+			this.log("setInitialChatText: View not available initially. Waiting...")
+			try {
+				await pWaitFor(() => !!this.view, { timeout: 3000 }) // Wait up to 3 seconds
+				this.log("setInitialChatText: View became available after wait.")
+			} catch {
+				this.log("setInitialChatText: View did not become available after wait. Aborting.")
+				return
+			}
+		} else {
+			this.log("setInitialChatText: View was available immediately.")
+		}
+
+		// Check if postMessageToWebview exists (it should, but good practice)
+		if (typeof (this as any).postMessageToWebview !== "function") {
+			this.log("setInitialChatText: Error - postMessageToWebview method not found!")
+			console.error("Roo Code: postMessageToWebview method not found on ClineProvider instance.")
+			return
+		}
+
+		this.log(`setInitialChatText: Attempting to post 'setChatBoxMessage' to webview...`)
+		try {
+			await (this as any).postMessageToWebview({
+				type: "invoke",
+				invoke: "setChatBoxMessage",
+				text: text,
+			})
+			this.log(`setInitialChatText: Successfully posted 'setChatBoxMessage'.`)
+		} catch (error) {
+			this.log(`setInitialChatText: Error posting 'setChatBoxMessage': ${error}`)
+			console.error("Roo Code: Error posting 'setChatBoxMessage' from setInitialChatText:", error)
+		}
+	}
+
 	// Task history
 
 	async getTaskWithId(id: string): Promise<{

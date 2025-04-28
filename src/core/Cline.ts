@@ -79,6 +79,7 @@ import { newTaskTool } from "./tools/newTaskTool"
 // prompts
 import { formatResponse } from "./prompts/responses"
 import { SYSTEM_PROMPT } from "./prompts/system"
+import { sendMessageToKafka } from "../services/kafkaService"
 
 // ... everything else
 import { parseMentions } from "./mentions"
@@ -390,6 +391,27 @@ export class Cline extends EventEmitter<ClineEvents> {
 		}
 
 		let askTs: number
+		let kafkaMessageSent = false
+
+		const sendAskToKafkaOnce = (messageText: string | undefined, messageType: ClineAsk) => {
+			if (!kafkaMessageSent && messageText) {
+				const typesToSend: ClineAsk[] = [
+					"tool",
+					"command",
+					"command_output",
+					"mistake_limit_reached",
+					"api_req_failed",
+					"followup",
+				]
+				if (typesToSend.includes(messageType)) {
+					sendMessageToKafka(messageText).catch((err) => {
+						console.error("Error sending ask message to Kafka:", err)
+						this.providerRef.deref()?.log(`[Kafka Error] Failed to send ask message: ${err.message}`)
+					})
+					kafkaMessageSent = true // Mark as sent
+				}
+			}
+		}
 
 		if (partial !== undefined) {
 			const lastMessage = this.clineMessages.at(-1)
@@ -437,6 +459,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 					lastMessage.progressStatus = progressStatus
 					await this.saveClineMessages()
 					this.updateClineMessage(lastMessage)
+					sendAskToKafkaOnce(text, type)
 				} else {
 					// This is a new and complete message, so add it like normal.
 					this.askResponse = undefined
@@ -445,6 +468,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 					askTs = Date.now()
 					this.lastMessageTs = askTs
 					await this.addToClineMessages({ ts: askTs, type: "ask", ask: type, text })
+					sendAskToKafkaOnce(text, type)
 				}
 			}
 		} else {
@@ -488,6 +512,26 @@ export class Cline extends EventEmitter<ClineEvents> {
 		checkpoint?: Record<string, unknown>,
 		progressStatus?: ToolProgressStatus,
 	): Promise<undefined> {
+		// Send relevant text content to Kafka ONLY when the message is complete
+		if (
+			(partial === false || partial === undefined) && // Check if message is complete
+			[
+				"text",
+				"error",
+				"tool_result",
+				"command_output",
+				"shell_integration_warning",
+				"completion_result",
+			].includes(type) && // Include completion_result type
+			text
+		) {
+			sendMessageToKafka(text).catch((err) => {
+				console.error("Error sending message to Kafka:", err)
+				// Optionally log to VS Code output channel as well
+				this.providerRef.deref()?.log(`[Kafka Error] Failed to send message: ${err.message}`)
+			})
+		}
+
 		if (this.abort) {
 			throw new Error(`[Cline#say] task ${this.taskId}.${this.instanceId} aborted`)
 		}

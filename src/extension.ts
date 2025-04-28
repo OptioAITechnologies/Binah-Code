@@ -27,6 +27,7 @@ import { migrateSettings } from "./utils/migrateSettings"
 
 import { handleUri, registerCommands, registerCodeActions, registerTerminalActions } from "./activate"
 import { formatLanguage } from "./shared/language"
+import { startListening, disconnectKafka } from "./services/kafkaService" // Import Kafka functions
 
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -117,6 +118,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	registerCodeActions(context)
 	registerTerminalActions(context)
 
+	// Start Kafka listener
+	startListening(provider).catch((error) => {
+		outputChannel.appendLine(`Failed to start Kafka listener: ${error}`)
+	})
+
 	// Allows other extensions to activate once Roo is ready.
 	vscode.commands.executeCommand("roo-cline.activationCompleted")
 
@@ -129,6 +135,8 @@ export async function activate(context: vscode.ExtensionContext) {
 // This method is called when your extension is deactivated
 export async function deactivate() {
 	outputChannel.appendLine("Roo-Code extension deactivated")
+	// Disconnect Kafka
+	await disconnectKafka()
 	// Clean up MCP server manager
 	await McpServerManager.cleanup(extensionContext)
 	telemetryService.shutdown()
