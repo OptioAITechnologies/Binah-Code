@@ -44,6 +44,8 @@ export interface ChatViewProps {
 	isHidden: boolean
 	showAnnouncement: boolean
 	hideAnnouncement: () => void
+	initialText?: string // Add prop for initial text from URI
+	clearInitialText?: () => void // Add prop to clear initial text in parent
 }
 
 export interface ChatViewRef {
@@ -55,7 +57,7 @@ export const MAX_IMAGES_PER_MESSAGE = 20 // Anthropic limits to 20 images
 const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0
 
 const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewProps> = (
-	{ isHidden, showAnnouncement, hideAnnouncement },
+	{ isHidden, showAnnouncement, hideAnnouncement, initialText, clearInitialText },
 	ref,
 ) => {
 	const { t } = useAppTranslation()
@@ -138,6 +140,16 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 	function playTts(text: string) {
 		vscode.postMessage({ type: "playTts", text })
 	}
+
+	useEffect(() => {
+		if (initialText && clearInitialText) {
+			console.log(`ChatView: Setting initial text from prop: ${initialText.substring(0, 50)}...`) // Log
+			setInputValue(initialText)
+			clearInitialText() // Clear the prop in the parent state
+			// Optionally focus the text area
+			setTimeout(() => textAreaRef.current?.focus(), 50)
+		}
+	}, [initialText, clearInitialText, setInputValue])
 
 	useDeepCompareEffect(() => {
 		// if last message is an ask, show user ask UI
@@ -408,8 +420,8 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 	}, [])
 
 	/*
-	This logic depends on the useEffect[messages] above to set clineAsk, after which buttons are shown and we then send an askResponse to the extension.
-	*/
+    This logic depends on the useEffect[messages] above to set clineAsk, after which buttons are shown and we then send an askResponse to the extension.
+    */
 	const handlePrimaryButtonClick = useCallback(
 		(text?: string, images?: string[]) => {
 			const trimmedInput = text?.trim()
@@ -1279,20 +1291,20 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 			)}
 
 			{/* 
-			// Flex layout explanation:
-			// 1. Content div above uses flex: "1 1 0" to:
-			//    - Grow to fill available space (flex-grow: 1) 
-			//    - Shrink when AutoApproveMenu needs space (flex-shrink: 1)
-			//    - Start from zero size (flex-basis: 0) to ensure proper distribution
-			//    minHeight: 0 allows it to shrink below its content height
-			//
-			// 2. AutoApproveMenu uses flex: "0 1 auto" to:
-			//    - Not grow beyond its content (flex-grow: 0)
-			//    - Shrink when viewport is small (flex-shrink: 1) 
-			//    - Use its content size as basis (flex-basis: auto)
-			//    This ensures it takes its natural height when there's space
-			//    but becomes scrollable when the viewport is too small
-			*/}
+            // Flex layout explanation:
+            // 1. Content div above uses flex: "1 1 0" to:
+            //    - Grow to fill available space (flex-grow: 1) 
+            //    - Shrink when AutoApproveMenu needs space (flex-shrink: 1)
+            //    - Start from zero size (flex-basis: 0) to ensure proper distribution
+            //    minHeight: 0 allows it to shrink below its content height
+            //
+            // 2. AutoApproveMenu uses flex: "0 1 auto" to:
+            //    - Not grow beyond its content (flex-grow: 0)
+            //    - Shrink when viewport is small (flex-shrink: 1) 
+            //    - Use its content size as basis (flex-basis: auto)
+            //    This ensures it takes its natural height when there's space
+            //    but becomes scrollable when the viewport is too small
+            */}
 			{!task && (
 				<div className="mb-[-2px] flex-initial min-h-0">
 					<AutoApproveMenu />

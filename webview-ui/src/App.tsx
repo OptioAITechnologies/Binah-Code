@@ -32,6 +32,7 @@ const App = () => {
 
 	const [showAnnouncement, setShowAnnouncement] = useState(false)
 	const [tab, setTab] = useState<Tab>("chat")
+	const [initialChatText, setInitialChatText] = useState<string | undefined>(undefined) // State for initial text
 
 	const [humanRelayDialogState, setHumanRelayDialogState] = useState<{
 		isOpen: boolean
@@ -77,11 +78,17 @@ const App = () => {
 				setHumanRelayDialogState({ isOpen: true, requestId, promptText })
 			}
 
-			if (message.type === "acceptInput") {
-				chatViewRef.current?.acceptInput()
+			// Handle the message to set initial chat text
+			if (
+				message.type === "invoke" &&
+				message.invoke === "setChatBoxMessage" &&
+				typeof message.text === "string"
+			) {
+				console.log(`Webview UI: Received setChatBoxMessage: ${message.text.substring(0, 50)}...`) // Log received message
+				setInitialChatText(message.text)
 			}
 		},
-		[switchTab],
+		[switchTab, setInitialChatText], // Add setInitialChatText to dependencies
 	)
 
 	useEvent("message", onMessage)
@@ -123,6 +130,8 @@ const App = () => {
 				isHidden={tab !== "chat"}
 				showAnnouncement={showAnnouncement}
 				hideAnnouncement={() => setShowAnnouncement(false)}
+				initialText={initialChatText} // Pass initial text as prop
+				clearInitialText={() => setInitialChatText(undefined)} // Add callback to clear it after use
 			/>
 			<HumanRelayDialog
 				isOpen={humanRelayDialogState.isOpen}
