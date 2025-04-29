@@ -1,5 +1,5 @@
 {
-	"greeting": "Roo Code'a Hoş Geldiniz",
+	"greeting": "Binah'a Hoş Geldiniz",
 	"task": {
 		"title": "Görev",
 		"seeMore": "Daha fazla gör",
@@ -194,7 +194,7 @@
 	"autoApprove": {
 		"title": "Otomatik-onay:",
 		"none": "Hiçbiri",
-		"description": "Otomatik onay, Roo Code'un izin istemeden işlemler gerçekleştirmesine olanak tanır. Yalnızca tamamen güvendiğiniz eylemler için etkinleştirin. Daha detaylı yapılandırma <settingsLink>Ayarlar</settingsLink>'da mevcuttur."
+		"description": "Otomatik onay, Binah'un izin istemeden işlemler gerçekleştirmesine olanak tanır. Yalnızca tamamen güvendiğiniz eylemler için etkinleştirin. Daha detaylı yapılandırma <settingsLink>Ayarlar</settingsLink>'da mevcuttur."
 	},
 	"reasoning": {
 		"thinking": "Düşünüyor",
@@ -204,8 +204,8 @@
 		"copyToInput": "Giriş alanına kopyala (veya Shift + tıklama)"
 	},
 	"announcement": {
-		"title": "🎉 Roo Code 3.14 Yayınlandı",
-		"description": "Roo Code 3.14 geri bildirimlerinize dayalı yeni özellikler ve iyileştirmeler getiriyor.",
+		"title": "🎉 Binah 3.14 Yayınlandı",
+		"description": "Binah 3.14 geri bildirimlerinize dayalı yeni özellikler ve iyileştirmeler getiriyor.",
 		"whatsNew": "Yenilikler",
 		"feature1": "<bold>Geliştirilmiş Düzenleme Araçları</bold>: <code>search_and_replace</code> ve <code>insert_content</code> araçları iyileştirildi ve deneysel statüsünden çıkarıldı",
 		"feature2": "<bold>Apply_diff İyileştirmeleri</bold>: <code>apply_diff</code> aracını geliştirmeye devam ediyoruz",

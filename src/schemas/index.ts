@@ -542,7 +542,7 @@ export const globalSettingsSchema = z.object({
 
 	maxOpenTabsContext: z.number().optional(),
 	maxWorkspaceFiles: z.number().optional(),
-	showRooIgnoredFiles: z.boolean().optional(),
+	showBinahIgnoredFiles: z.boolean().optional(),
 	maxReadFileLine: z.number().optional(),
 
 	terminalOutputLineLimit: z.number().optional(),
@@ -619,7 +619,7 @@ const globalSettingsRecord: GlobalSettingsRecord = {
 
 	maxOpenTabsContext: undefined,
 	maxWorkspaceFiles: undefined,
-	showRooIgnoredFiles: undefined,
+	showBinahIgnoredFiles: undefined,
 	maxReadFileLine: undefined,
 
 	terminalOutputLineLimit: undefined,
@@ -651,7 +651,7 @@ const globalSettingsRecord: GlobalSettingsRecord = {
 	customSupportPrompts: undefined,
 	enhancementApiConfigId: undefined,
 	cachedChromeHostUrl: undefined,
-	historyPreviewCollapsed: undefined, 
+	historyPreviewCollapsed: undefined,
 }
 
 export const GLOBAL_SETTINGS_KEYS = Object.keys(globalSettingsRecord) as Keys<GlobalSettings>[]

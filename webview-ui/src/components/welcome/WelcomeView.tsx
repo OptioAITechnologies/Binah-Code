@@ -8,7 +8,7 @@ import { Tab, TabContent } from "../common/Tab"
 import { Trans } from "react-i18next"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { getRequestyAuthUrl, getOpenRouterAuthUrl } from "@src/oauth/urls"
-import RooHero from "./RooHero"
+import BinahHero from "./BinahHero"
 import knuthShuffle from "knuth-shuffle-seeded"
 
 const WelcomeView = () => {
@@ -37,7 +37,7 @@ const WelcomeView = () => {
 	return (
 		<Tab>
 			<TabContent className="flex flex-col gap-5">
-				<RooHero />
+				<BinahHero />
 				<h2 className="mx-auto">{t("chat:greeting")}</h2>
 
 				<div className="outline rounded p-4">

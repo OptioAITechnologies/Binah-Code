@@ -1,5 +1,5 @@
 {
-	"greeting": "Welcome to Roo Code",
+	"greeting": "Welcome to Binah",
 	"task": {
 		"title": "Task",
 		"seeMore": "See more",
@@ -195,11 +195,11 @@
 	"autoApprove": {
 		"title": "Auto-approve:",
 		"none": "None",
-		"description": "Auto-approve allows Roo Code to perform actions without asking for permission. Only enable for actions you fully trust. More detailed configuration available in <settingsLink>Settings</settingsLink>."
+		"description": "Auto-approve allows Binah to perform actions without asking for permission. Only enable for actions you fully trust. More detailed configuration available in <settingsLink>Settings</settingsLink>."
 	},
 	"announcement": {
-		"title": "🎉 Roo Code 3.14 Released",
-		"description": "Roo Code 3.14 brings new features and improvements based on your feedback.",
+		"title": "🎉 Binah 3.14 Released",
+		"description": "Binah 3.14 brings new features and improvements based on your feedback.",
 		"whatsNew": "What's New",
 		"feature1": "<bold>Improved Editing Tools</bold>: The <code>search_and_replace</code> and <code>insert_content</code> tools have been improved and graduated from experimental status",
 		"feature2": "<bold>Diff Apply Fixes</bold>: We continue to work on improving the <code>apply_diff</code> tool",

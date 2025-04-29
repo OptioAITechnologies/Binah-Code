@@ -28,7 +28,7 @@ describe("ContextManagementSettings", () => {
 	const defaultProps = {
 		maxOpenTabsContext: 20,
 		maxWorkspaceFiles: 200,
-		showRooIgnoredFiles: false,
+		showBinahIgnoredFiles: false,
 		setCachedStateField: jest.fn(),
 	}
 
@@ -48,9 +48,9 @@ describe("ContextManagementSettings", () => {
 		expect(workspaceFilesSlider).toBeInTheDocument()
 
 		// Show .rooignore'd files
-		const showRooIgnoredFilesCheckbox = screen.getByTestId("show-rooignored-files-checkbox")
-		expect(showRooIgnoredFilesCheckbox).toBeInTheDocument()
-		expect(screen.getByTestId("show-rooignored-files-checkbox")).not.toBeChecked()
+		const showBinahIgnoredFilesCheckbox = screen.getByTestId("show-binahignored-files-checkbox")
+		expect(showBinahIgnoredFilesCheckbox).toBeInTheDocument()
+		expect(screen.getByTestId("show-binahignored-files-checkbox")).not.toBeChecked()
 	})
 
 	it("updates open tabs context limit", () => {
@@ -74,9 +74,9 @@ describe("ContextManagementSettings", () => {
 	it("updates show rooignored files setting", () => {
 		render(<ContextManagementSettings {...defaultProps} />)
 
-		const checkbox = screen.getByTestId("show-rooignored-files-checkbox")
+		const checkbox = screen.getByTestId("show-binahignored-files-checkbox")
 		fireEvent.click(checkbox)
 
-		expect(defaultProps.setCachedStateField).toHaveBeenCalledWith("showRooIgnoredFiles", true)
+		expect(defaultProps.setCachedStateField).toHaveBeenCalledWith("showBinahIgnoredFiles", true)
 	})
 })

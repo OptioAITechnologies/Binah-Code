@@ -116,7 +116,7 @@ export interface WebviewMessage {
 		| "humanRelayCancel"
 		| "browserToolEnabled"
 		| "telemetrySetting"
-		| "showRooIgnoredFiles"
+		| "showBinahIgnoredFiles"
 		| "testBrowserConnection"
 		| "browserConnectionResult"
 		| "remoteBrowserEnabled"

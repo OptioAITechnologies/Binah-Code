@@ -6,15 +6,15 @@ import clsx from "clsx"
 const tips = [
 	{
 		icon: "codicon-account",
-		href: "https://docs.roocode.com/basic-usage/using-modes",
-		titleKey: "rooTips.customizableModes.title",
-		descriptionKey: "rooTips.customizableModes.description",
+		href: "https://docs.binah.com/basic-usage/using-modes",
+		titleKey: "Modes",
+		descriptionKey: "",
 	},
 	{
 		icon: "codicon-list-tree",
-		href: "https://docs.roocode.com/features/boomerang-tasks",
-		titleKey: "rooTips.boomerangTasks.title",
-		descriptionKey: "rooTips.boomerangTasks.description",
+		href: "https://docs.binah.com/features/boomerang-tasks",
+		titleKey: "Recursion",
+		descriptionKey: "",
 	},
 ]
 
