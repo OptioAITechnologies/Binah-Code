@@ -204,7 +204,7 @@ const ApiOptions = ({
 	)
 
 	// Base URL for provider documentation
-	const DOC_BASE_URL = "https://docs.roocode.com/providers"
+	const DOC_BASE_URL = "https://docs.binah.com/providers"
 
 	// Custom URL path mappings for providers with different slugs
 	const providerUrlSlugs: Record<string, string> = {

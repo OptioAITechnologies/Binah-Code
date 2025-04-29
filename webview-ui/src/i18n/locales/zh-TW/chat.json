@@ -1,5 +1,5 @@
 {
-	"greeting": "歡迎使用 Roo Code",
+	"greeting": "歡迎使用 Binah",
 	"task": {
 		"title": "工作",
 		"seeMore": "顯示更多",
@@ -194,7 +194,7 @@
 	"autoApprove": {
 		"title": "自動核准：",
 		"none": "無",
-		"description": "自動核准讓 Roo Code 可以在無需徵求您同意的情況下執行動作。請僅對您完全信任的動作啟用此功能。您可以在<settingsLink>設定</settingsLink>中進行更詳細的調整。"
+		"description": "自動核准讓 Binah 可以在無需徵求您同意的情況下執行動作。請僅對您完全信任的動作啟用此功能。您可以在<settingsLink>設定</settingsLink>中進行更詳細的調整。"
 	},
 	"reasoning": {
 		"thinking": "思考中",
@@ -204,8 +204,8 @@
 		"copyToInput": "複製到輸入框（或按住 Shift 並點選）"
 	},
 	"announcement": {
-		"title": "🎉 Roo Code 3.14 已發布",
-		"description": "Roo Code 3.14 帶來基於您意見回饋的新功能與改進。",
+		"title": "🎉 Binah 3.14 已發布",
+		"description": "Binah 3.14 帶來基於您意見回饋的新功能與改進。",
 		"whatsNew": "新功能",
 		"feature1": "<bold>編輯工具增強</bold>: <code>search_and_replace</code> 和 <code>insert_content</code> 工具已獲改進，並從實驗階段升級為正式功能",
 		"feature2": "<bold>差異更新修復</bold>: 我們持續改進 <code>apply_diff</code> 工具",

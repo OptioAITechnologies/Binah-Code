@@ -204,7 +204,7 @@ type GlobalSettings = {
 	soundVolume?: number | undefined
 	maxOpenTabsContext?: number | undefined
 	maxWorkspaceFiles?: number | undefined
-	showRooIgnoredFiles?: boolean | undefined
+	showBinahIgnoredFiles?: boolean | undefined
 	maxReadFileLine?: number | undefined
 	terminalOutputLineLimit?: number | undefined
 	terminalShellIntegrationTimeout?: number | undefined

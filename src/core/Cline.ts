@@ -143,7 +143,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 	api: ApiHandler
 	private promptCacheKey: string
 
-	rooIgnoreController?: RooIgnoreController
+	binahIgnoreController?: RooIgnoreController
 	private fileContextTracker: FileContextTracker
 	private urlContentFetcher: UrlContentFetcher
 	browserSession: BrowserSession
@@ -225,10 +225,10 @@ export class Cline extends EventEmitter<ClineEvents> {
 		this.instanceId = crypto.randomUUID().slice(0, 8)
 		this.taskNumber = -1
 
-		this.rooIgnoreController = new RooIgnoreController(this.cwd)
+		this.binahIgnoreController = new RooIgnoreController(this.cwd)
 		this.fileContextTracker = new FileContextTracker(provider, this.taskId)
 
-		this.rooIgnoreController.initialize().catch((error) => {
+		this.binahIgnoreController.initialize().catch((error) => {
 			console.error("Failed to initialize RooIgnoreController:", error)
 		})
 
@@ -971,7 +971,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 
 		this.urlContentFetcher.closeBrowser()
 		this.browserSession.closeBrowser()
-		this.rooIgnoreController?.dispose()
+		this.binahIgnoreController?.dispose()
 		this.fileContextTracker.dispose()
 
 		// If we're not streaming then `abortStream` (which reverts the diff
@@ -1032,7 +1032,7 @@ export class Cline extends EventEmitter<ClineEvents> {
 			})
 		}
 
-		const rooIgnoreInstructions = this.rooIgnoreController?.getInstructions()
+		const rooIgnoreInstructions = this.binahIgnoreController?.getInstructions()
 
 		const {
 			browserViewportSize,
@@ -2055,9 +2055,9 @@ export class Cline extends EventEmitter<ClineEvents> {
 			.map((absolutePath) => path.relative(this.cwd, absolutePath))
 			.slice(0, maxWorkspaceFiles)
 
-		// Filter paths through rooIgnoreController
-		const allowedVisibleFiles = this.rooIgnoreController
-			? this.rooIgnoreController.filterPaths(visibleFilePaths)
+		// Filter paths through binahIgnoreController
+		const allowedVisibleFiles = this.binahIgnoreController
+			? this.binahIgnoreController.filterPaths(visibleFilePaths)
 			: visibleFilePaths.map((p) => p.toPosix()).join("\n")
 
 		if (allowedVisibleFiles) {
@@ -2076,9 +2076,9 @@ export class Cline extends EventEmitter<ClineEvents> {
 			.map((absolutePath) => path.relative(this.cwd, absolutePath).toPosix())
 			.slice(0, maxTabs)
 
-		// Filter paths through rooIgnoreController
-		const allowedOpenTabs = this.rooIgnoreController
-			? this.rooIgnoreController.filterPaths(openTabPaths)
+		// Filter paths through binahIgnoreController
+		const allowedOpenTabs = this.binahIgnoreController
+			? this.binahIgnoreController.filterPaths(openTabPaths)
 			: openTabPaths.map((p) => p.toPosix()).join("\n")
 
 		if (allowedOpenTabs) {
@@ -2277,13 +2277,13 @@ export class Cline extends EventEmitter<ClineEvents> {
 			} else {
 				const maxFiles = maxWorkspaceFiles ?? 200
 				const [files, didHitLimit] = await listFiles(this.cwd, true, maxFiles)
-				const { showRooIgnoredFiles = true } = (await this.providerRef.deref()?.getState()) ?? {}
+				const { showBinahIgnoredFiles = true } = (await this.providerRef.deref()?.getState()) ?? {}
 				const result = formatResponse.formatFilesList(
 					this.cwd,
 					files,
 					didHitLimit,
-					this.rooIgnoreController,
-					showRooIgnoredFiles,
+					this.binahIgnoreController,
+					showBinahIgnoredFiles,
 				)
 				details += result
 			}

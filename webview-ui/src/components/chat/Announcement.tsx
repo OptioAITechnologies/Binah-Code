@@ -14,11 +14,11 @@ const Announcement = ({ hideAnnouncement }: AnnouncementProps) => {
 
 	const discordLink = (
 		<VSCodeLink
-			href="https://discord.gg/roocode"
+			href="https://discord.gg/binah"
 			onClick={(e) => {
 				e.preventDefault()
 				window.postMessage(
-					{ type: "action", action: "openExternal", data: { url: "https://discord.gg/roocode" } },
+					{ type: "action", action: "openExternal", data: { url: "https://discord.gg/binah" } },
 					"*",
 				)
 			}}>
@@ -28,11 +28,11 @@ const Announcement = ({ hideAnnouncement }: AnnouncementProps) => {
 
 	const redditLink = (
 		<VSCodeLink
-			href="https://reddit.com/r/RooCode"
+			href="https://reddit.com/r/Binah"
 			onClick={(e) => {
 				e.preventDefault()
 				window.postMessage(
-					{ type: "action", action: "openExternal", data: { url: "https://reddit.com/r/RooCode" } },
+					{ type: "action", action: "openExternal", data: { url: "https://reddit.com/r/Binah" } },
 					"*",
 				)
 			}}>

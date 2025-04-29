@@ -836,8 +836,8 @@ export const webviewMessageHandler = async (provider: ClineProvider, message: We
 			await updateGlobalState("language", message.text as Language)
 			await provider.postStateToWebview()
 			break
-		case "showRooIgnoredFiles":
-			await updateGlobalState("showRooIgnoredFiles", message.bool ?? true)
+		case "showBinahIgnoredFiles":
+			await updateGlobalState("showBinahIgnoredFiles", message.bool ?? true)
 			await provider.postStateToWebview()
 			break
 		case "maxReadFileLine":
@@ -1270,7 +1270,7 @@ const generateSystemPrompt = async (provider: ClineProvider, message: WebviewMes
 	const mode = message.mode ?? defaultModeSlug
 	const customModes = await provider.customModesManager.getCustomModes()
 
-	const rooIgnoreInstructions = provider.getCurrentCline()?.rooIgnoreController?.getInstructions()
+	const rooIgnoreInstructions = provider.getCurrentCline()?.binahIgnoreController?.getInstructions()
 
 	// Determine if browser tools can be used based on model support, mode, and user settings
 	let modelSupportsComputerUse = false

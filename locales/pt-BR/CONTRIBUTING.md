@@ -1,6 +1,6 @@
-# Contribuindo para o Roo Code
+# Contribuindo para o Binah
 
-Estamos entusiasmados por você estar interessado em contribuir para o Roo Code. Seja corrigindo um bug, adicionando um recurso ou melhorando nossa documentação, cada contribuição torna o Roo Code mais inteligente! Para manter nossa comunidade vibrante e acolhedora, todos os membros devem aderir ao nosso [Código de Conduta](CODE_OF_CONDUCT.md).
+Estamos entusiasmados por você estar interessado em contribuir para o Binah. Seja corrigindo um bug, adicionando um recurso ou melhorando nossa documentação, cada contribuição torna o Binah mais inteligente! Para manter nossa comunidade vibrante e acolhedora, todos os membros devem aderir ao nosso [Código de Conduta](CODE_OF_CONDUCT.md).
 
 ## Junte-se à Nossa Comunidade
 
@@ -9,12 +9,12 @@ Incentivamos fortemente todos os colaboradores a se juntarem à nossa [comunidad
 - Obter ajuda e orientação em tempo real sobre suas contribuições
 - Conectar-se com outros colaboradores e membros da equipe principal
 - Manter-se atualizado sobre os desenvolvimentos e prioridades do projeto
-- Participar de discussões que moldam o futuro do Roo Code
+- Participar de discussões que moldam o futuro do Binah
 - Encontrar oportunidades de colaboração com outros desenvolvedores
 
 ## Relatando Bugs ou Problemas
 
-Relatórios de bugs ajudam a tornar o Roo Code melhor para todos! Antes de criar uma nova issue, por favor [pesquise as existentes](https://github.com/RooVetGit/Roo-Code/issues) para evitar duplicatas. Quando estiver pronto para relatar um bug, vá para nossa [página de issues](https://github.com/RooVetGit/Roo-Code/issues/new/choose) onde você encontrará um modelo para ajudá-lo a preencher as informações relevantes.
+Relatórios de bugs ajudam a tornar o Binah melhor para todos! Antes de criar uma nova issue, por favor [pesquise as existentes](https://github.com/RooVetGit/Roo-Code/issues) para evitar duplicatas. Quando estiver pronto para relatar um bug, vá para nossa [página de issues](https://github.com/RooVetGit/Roo-Code/issues/new/choose) onde você encontrará um modelo para ajudá-lo a preencher as informações relevantes.
 
 <blockquote class='warning-note'>
      🔐 <b>Importante:</b> Se você descobrir uma vulnerabilidade de segurança, por favor use a <a href="https://github.com/RooVetGit/Roo-Code/security/advisories/new">ferramenta de segurança do Github para relatá-la de forma privada</a>.
@@ -22,15 +22,15 @@ Relatórios de bugs ajudam a tornar o Roo Code melhor para todos! Antes de criar
 
 ## Decidindo no que Trabalhar
 
-Procurando uma boa primeira contribuição? Verifique as issues na seção "Issue [Unassigned]" do nosso [Projeto Github Roo Code](https://github.com/orgs/RooVetGit/projects/1). Estas são especialmente selecionadas para novos colaboradores e áreas onde gostaríamos de ter alguma ajuda!
+Procurando uma boa primeira contribuição? Verifique as issues na seção "Issue [Unassigned]" do nosso [Projeto Github Binah](https://github.com/orgs/RooVetGit/projects/1). Estas são especialmente selecionadas para novos colaboradores e áreas onde gostaríamos de ter alguma ajuda!
 
-Também damos as boas-vindas a contribuições para nossa [documentação](https://docs.roocode.com/)! Seja corrigindo erros de digitação, melhorando guias existentes ou criando novo conteúdo educacional - adoraríamos construir um repositório de recursos impulsionado pela comunidade que ajude todos a obter o máximo do Roo Code. Você pode clicar em "Edit this page" em qualquer página para ir rapidamente ao local certo no Github para editar o arquivo, ou pode mergulhar diretamente em https://github.com/RooVetGit/Roo-Code-Docs.
+Também damos as boas-vindas a contribuições para nossa [documentação](https://docs.roocode.com/)! Seja corrigindo erros de digitação, melhorando guias existentes ou criando novo conteúdo educacional - adoraríamos construir um repositório de recursos impulsionado pela comunidade que ajude todos a obter o máximo do Binah. Você pode clicar em "Edit this page" em qualquer página para ir rapidamente ao local certo no Github para editar o arquivo, ou pode mergulhar diretamente em https://github.com/RooVetGit/Roo-Code-Docs.
 
-Se você está planejando trabalhar em um recurso maior, por favor crie primeiro uma [solicitação de recurso](https://github.com/RooVetGit/Roo-Code/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop) para que possamos discutir se está alinhado com a visão do Roo Code. Você também pode verificar nosso [Roteiro do Projeto](#roteiro-do-projeto) abaixo para ver se sua ideia se encaixa em nossa direção estratégica.
+Se você está planejando trabalhar em um recurso maior, por favor crie primeiro uma [solicitação de recurso](https://github.com/RooVetGit/Roo-Code/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop) para que possamos discutir se está alinhado com a visão do Binah. Você também pode verificar nosso [Roteiro do Projeto](#roteiro-do-projeto) abaixo para ver se sua ideia se encaixa em nossa direção estratégica.
 
 ## Roteiro do Projeto
 
-O Roo Code possui um roteiro de desenvolvimento claro que orienta nossas prioridades e direção futura. Entender nosso roteiro pode ajudar você a:
+O Binah possui um roteiro de desenvolvimento claro que orienta nossas prioridades e direção futura. Entender nosso roteiro pode ajudar você a:
 
 - Alinhar suas contribuições com os objetivos do projeto
 - Identificar áreas onde sua expertise seria mais valiosa
@@ -82,10 +82,10 @@ Queremos diminuir significativamente o número de bugs e aumentar os testes auto
 
 Queremos que o Roo fale o idioma de todos:
 
-- 我们希望 Roo Code 说每个人的语言
-- Queremos que Roo Code hable el idioma de todos
-- हम चाहते हैं कि Roo Code हर किसी की भाषा बोले
-- نريد أن يتحدث Roo Code لغة الجميع
+- 我们希望 Binah 说每个人的语言
+- Queremos que Binah hable el idioma de todos
+- हम चाहते हैं कि Binah हर किसी की भाषा बोले
+- نريد أن يتحدث Binah لغة الجميع
 
 Damos especialmente as boas-vindas a contribuições que avançam os objetivos do nosso roteiro. Se você estiver trabalhando em algo que se alinha com esses pilares, por favor mencione isso na descrição do seu PR.
 
@@ -110,7 +110,7 @@ npm run dev
 ```
 
 4. **Depuração**:
-   Pressione `F5` (ou **Executar** → **Iniciar Depuração**) no VSCode para abrir uma nova sessão com o Roo Code carregado.
+   Pressione `F5` (ou **Executar** → **Iniciar Depuração**) no VSCode para abrir uma nova sessão com o Binah carregado.
 
 Alterações no webview aparecerão imediatamente. Alterações na extensão principal exigirão a reinicialização do host da extensão.
 
@@ -128,7 +128,7 @@ code --install-extension bin/roo-cline-<version>.vsix
 
 ## Escrevendo e Enviando Código
 
-Qualquer pessoa pode contribuir com código para o Roo Code, mas pedimos que você siga estas diretrizes para garantir que suas contribuições possam ser integradas sem problemas:
+Qualquer pessoa pode contribuir com código para o Binah, mas pedimos que você siga estas diretrizes para garantir que suas contribuições possam ser integradas sem problemas:
 
 1. **Mantenha os Pull Requests Focados**
 
